@@ -21,7 +21,7 @@ dependencies = [
 ]
 
 [project.scripts]
-mot = "discovereasy.mot"
+mot = "discovereasy.mot:app"
 
 [tool.setuptools_scm]
 version_scheme = "post-release"
