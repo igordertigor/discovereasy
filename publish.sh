@@ -9,9 +9,10 @@ function cleanup () {
 trap cleanup ERR
 
 VERSION=$(git tag | tail -n 1 | sed -r 's/v//')
+NAME=discovereasy
 
-SOURCEDIST=discovereasy-${VERSION}.tar.gz
-BINDIST=csvmodel-${VERSION}-py3-name-any.whl
+SOURCEDIST=${NAME}-${VERSION}.tar.gz
+BINDIST=${NAME}-${VERSION}-py3-name-any.whl
 
 echo $VERSION
 
