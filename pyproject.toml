@@ -18,6 +18,8 @@ dependencies = [
   "typer",
   "pydantic",
   "rich",
+  "pyyaml",
+  "jinja2",
 ]
 
 [project.scripts]
