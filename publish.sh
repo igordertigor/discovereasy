@@ -12,7 +12,7 @@ VERSION=$(git tag | tail -n 1 | sed -r 's/v//')
 NAME=discovereasy
 
 SOURCEDIST=${NAME}-${VERSION}.tar.gz
-BINDIST=${NAME}-${VERSION}-py3-name-any.whl
+BINDIST=${NAME}-${VERSION}-py3-none-any.whl
 
 echo $VERSION
 
