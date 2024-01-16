@@ -1,38 +1,17 @@
 from typing import Callable
 from typing_extensions import Annotated
 from yaml import safe_load
-from enum import Enum
 import textwrap
 from jinja2 import PackageLoader, Environment
-from pydantic import BaseModel
 import typer
+
+from .types import Node, NodeKind
 
 app = typer.Typer()
 
 
 class NoNodes(Exception):
     pass
-
-
-class NodeKind(str, Enum):
-    opportunity = 'opportunity'
-    solution = 'solution'
-    assumption = 'assumption'
-
-
-class NodeFocus(str, Enum):
-    focussed = 'focussed'
-    hidden = 'hidden'
-    neutral = 'neutral'
-
-
-class Node(BaseModel):
-    id: str
-    desc: str
-    parent: str = 'root'
-    kind: NodeKind = NodeKind.opportunity
-    prio: int = 5
-    focus: NodeFocus = NodeFocus.neutral
 
 
 def is_descendent(node: Node, of: Node, ref: dict[str, Node]) -> bool:
@@ -94,7 +73,9 @@ def has_prior_at_least(prio: int) -> Callable[[Node], bool]:
 @app.command()
 def main(
     filenames: list[str],
-    opportunities: Annotated[bool, typer.Option('--opportunities', '-o')] = False,
+    opportunities: Annotated[
+        bool, typer.Option('--opportunities', '-o')
+    ] = False,
     solutions: Annotated[bool, typer.Option('--solutions', '-s')] = False,
     assumptions: Annotated[bool, typer.Option('--assumptions', '-a')] = False,
     priority: Annotated[int, typer.Option('--priority', '-p')] = 5,
@@ -111,7 +92,9 @@ def main(
     nodes = {}
     for filename in filenames:
         with open(filename) as f:
-            nodes.update({i: Node(id=i, **vals) for i, vals in safe_load(f).items()})
+            nodes.update(
+                {i: Node(id=i, **vals) for i, vals in safe_load(f).items()}
+            )
 
     if any([n.focus == NodeFocus.focussed for n in nodes.values()]):
         nodes = filter_desc(nodes, lambda n: n.focus == NodeFocus.focussed)
@@ -142,12 +125,14 @@ def main(
     env = Environment(loader=PackageLoader('discovereasy'))
 
     template = env.get_template('graphs.j2.dot')
-    print(template.render(
-        nodes=nodes.values(),
-        fontspec=font,
-        properties=properties,
-        styles=styles,
-    ))
+    print(
+        template.render(
+            nodes=nodes.values(),
+            fontspec=font,
+            properties=properties,
+            styles=styles,
+        )
+    )
 
 
 if __name__ == '__main__':
