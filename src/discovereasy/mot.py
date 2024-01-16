@@ -5,9 +5,11 @@ import textwrap
 from jinja2 import PackageLoader, Environment
 import typer
 
-from .types import Node, NodeKind
+from .types import Node, NodeKind, NodeFocus
+from .assumptions import app as assumptions_app
 
 app = typer.Typer()
+app.add_typer(assumptions_app)
 
 
 class NoNodes(Exception):
@@ -71,7 +73,7 @@ def has_prior_at_least(prio: int) -> Callable[[Node], bool]:
 
 
 @app.command()
-def main(
+def mot(
     filenames: list[str],
     opportunities: Annotated[
         bool, typer.Option('--opportunities', '-o')
