@@ -67,8 +67,7 @@ def has_prior_at_least(prio: int) -> Callable[[Node], bool]:
     return p
 
 
-@app.command()
-def mot(
+def main(
     filenames: list[str],
     opportunities: Annotated[
         bool, typer.Option('--opportunities', '-o')

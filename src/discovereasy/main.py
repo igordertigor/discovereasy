@@ -1,10 +1,10 @@
 import typer
-from .opportunity_tree import app as opportunity_tree_app
-from .assumptions import app as assumptions_app
+from .opportunity_tree import main as opportunity_tree_main
+from .assumptions import main as assumptions_main
 
 app = typer.Typer()
-app.add_typer(opportunity_tree_app)
-app.add_typer(assumptions_app)
+app.command(name='opportunity-tree')(opportunity_tree_main)
+app.command(name='assumptions')(assumptions_main)
 
 if __name__ == '__main__':
     app()
