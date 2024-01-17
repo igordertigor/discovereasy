@@ -1,15 +1,10 @@
 from typing import Callable
 from typing_extensions import Annotated
-from yaml import safe_load
 import textwrap
 from jinja2 import PackageLoader, Environment
+from yaml import safe_load
 import typer
-
 from .types import Node, NodeKind, NodeFocus
-from .assumptions import app as assumptions_app
-
-app = typer.Typer()
-app.add_typer(assumptions_app)
 
 
 class NoNodes(Exception):
@@ -135,7 +130,3 @@ def mot(
             styles=styles,
         )
     )
-
-
-if __name__ == '__main__':
-    app()
