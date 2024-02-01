@@ -92,7 +92,9 @@ def risk_and_evidence(nodes: Iterator[Node]) -> float | None:
 def project_back_risk_and_evidence(nodes: dict[str, Node]) -> dict[str, Node]:
     for key, node in nodes.items():
         if node.kind == NodeKind.solution:
-            node.okness = risk_and_evidence(children(node, iter(nodes.values())))
+            node.okness = risk_and_evidence(
+                children(node, iter(nodes.values()))
+            )
     return nodes
 
 
