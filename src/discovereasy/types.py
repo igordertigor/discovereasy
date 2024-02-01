@@ -21,3 +21,6 @@ class Node(BaseModel):
     kind: NodeKind = NodeKind.opportunity
     prio: int = 5
     focus: NodeFocus = NodeFocus.neutral
+    risk: float | None = None
+    evidence: float | None = None
+    okness: float | None = None  # This would be the sum of the difference risk - evidence for all children
