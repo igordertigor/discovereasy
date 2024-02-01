@@ -37,7 +37,10 @@ def main(
     assumptions = normalize_evidence(normalize_risks(assumptions))
 
     for i, assumption in enumerate(
-        sorted(assumptions, key=lambda a: -a.risk_normalized + a.evidence_normalized)
+        sorted(
+            assumptions,
+            key=lambda a: -a.risk_normalized + a.evidence_normalized,
+        )
     ):
         print(format(assumption))
         if i > count:
@@ -45,7 +48,7 @@ def main(
 
 
 def format(assumption: Assumption):
-    return f'{assumption.id:8s}: {assumption.desc}  (risk: {assumption.risk}, evidence: {assumption.evidence})'
+    return f'{assumption.id:8s}: {assumption.desc}  (risk: {assumption.risk}, evidence: {assumption.evidence})'  # noqa: E501
 
 
 def normalize_risks(assumptions: list[Assumption]) -> list[Assumption]:
@@ -63,7 +66,11 @@ def normalize(
     mini = min(vals)
     maxi = max(vals)
     for a in assumptions:
-        setattr(a, dim.value + '_normalized', transform(getattr(a, dim.value), mini, maxi))
+        setattr(
+            a,
+            dim.value + '_normalized',
+            transform(getattr(a, dim.value), mini, maxi),
+        )
     return assumptions
 
 

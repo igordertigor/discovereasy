@@ -23,4 +23,5 @@ class Node(BaseModel):
     focus: NodeFocus = NodeFocus.neutral
     risk: float | None = None
     evidence: float | None = None
-    okness: float | None = None  # This would be the sum of the difference risk - evidence for all children
+    # This would be the sum of the difference risk - evidence for all children
+    okness: float | None = None

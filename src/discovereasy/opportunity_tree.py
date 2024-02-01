@@ -73,11 +73,14 @@ def children(of: Node, nodes: Iterator[Node]) -> Iterator[Node]:
 
 def risk_and_evidence(nodes: Iterator[Node]) -> float | None:
     has_assumptions = False
-    total = 0.
+    total = 0.0
     for node in nodes:
         if node.kind == NodeKind.assumption:
             if node.risk is None or node.evidence is None:
-                raise ValueError(f'Assumption nodes must have risk and evidence, but node {node.id} has not.')
+                raise ValueError(
+                    'Assumption nodes must have risk and evidence,'
+                    f' but node {node.id} has not.'
+                )
             total += node.risk - node.evidence
             has_assumptions = True
     if has_assumptions:
@@ -86,11 +89,10 @@ def risk_and_evidence(nodes: Iterator[Node]) -> float | None:
         return None
 
 
-
 def project_back_risk_and_evidence(nodes: dict[str, Node]) -> dict[str, Node]:
     for key, node in nodes.items():
         if node.kind == NodeKind.solution:
-            node.okness = risk_and_evidence(children(node, nodes.values()))
+            node.okness = risk_and_evidence(children(node, iter(nodes.values())))
     return nodes
 
 
@@ -102,7 +104,9 @@ def main(
     solutions: Annotated[bool, typer.Option('--solutions', '-s')] = False,
     assumptions: Annotated[bool, typer.Option('--assumptions', '-a')] = False,
     priority: Annotated[int, typer.Option('--priority', '-p')] = 5,
-    project_risk_and_evidence: Annotated[bool, typer.Option('--project-risk-and-evidence', '-r')] = False
+    project_risk_and_evidence: Annotated[
+        bool, typer.Option('--project-risk-and-evidence', '-r')
+    ] = False,
 ):
 
     predicates = []
