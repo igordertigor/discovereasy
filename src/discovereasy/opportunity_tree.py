@@ -42,6 +42,28 @@ def filter_no_desc(
     }
 
 
+def filter_branches(nodes: dict[str, Node], predicate: Callable[[Node], bool]):
+    keep, drop = [], []
+    for n in nodes.values():
+        if predicate(n):
+            keep.append(n.id)
+        else:
+            drop.append(n.id)
+
+    for _ in range(len(keep)):
+        keep2 = []
+        for idx in keep:
+            n = nodes[idx]
+            if n.parent in drop:
+                drop.append(n.id)
+            else:
+                keep2.append(n.id)
+        keep = keep2
+        if len(keep) == 0:
+            break
+    return {idx: nodes[idx] for idx in keep}
+
+
 def filter_pred(
     nodes: dict[str, Node], predicate: Callable[[Node], bool]
 ) -> dict[str, Node]:
@@ -131,7 +153,7 @@ def main(
     if any([n.focus == NodeFocus.hidden for n in nodes.values()]):
         nodes = filter_no_desc(nodes, lambda n: n.focus == NodeFocus.hidden)
 
-    nodes = filter_desc(nodes, has_prior_at_least(priority))
+    nodes = filter_branches(nodes, has_prior_at_least(priority))
     if not nodes:
         raise NoNodes(f'No nodes with priority >= {priority}')
     if predicates:
